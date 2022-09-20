@@ -29,6 +29,13 @@ struct PostListView: View {
                     .scaleEffect(1.5)
             }
         })
+        .alert("Application Error", isPresented: $viewModel.showAlert, actions: {
+            Button("Ok"){}
+        }, message: {
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+            }
+        })
         .navigationTitle("Posts")
         .navigationBarTitleDisplayMode(.inline)
         .listStyle(.plain)
