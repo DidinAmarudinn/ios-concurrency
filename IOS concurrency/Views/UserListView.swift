@@ -12,15 +12,19 @@ struct UserListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(viewModel.users) { user in
+                ForEach(viewModel.userAndPosts) { userAndPosts in
                     NavigationLink {
-                        PostListView(userId: user.id)
+                        PostListView(posts: userAndPosts.posts)
                     } label: {
                         VStack(alignment: .leading) {
-                            Text(user.name)
-                                .font(.title)
-                            
-                            Text(user.email)
+                            HStack {
+                                Text(userAndPosts.user.name)
+                                    .font(.title)
+                                
+                                Spacer()
+                                Text("\(userAndPosts.numberOfPosts)")
+                            }
+                            Text(userAndPosts.user.email)
                         }
                     }
                     
@@ -44,14 +48,6 @@ struct UserListView: View {
             .task {
                 await viewModel.fetchUser()
             }
-        }
-    }
-}
-extension UserListViewModel {
-    convenience init(forPreview: Bool = false) {
-        self.init()
-        if forPreview {
-            self.users = User.mockUsers
         }
     }
 }

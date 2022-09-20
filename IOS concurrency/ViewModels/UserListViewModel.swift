@@ -8,7 +8,7 @@
 import Foundation
 
 class UserListViewModel: ObservableObject {
-    @Published var users: [User] = []
+    @Published var userAndPosts: [UserAndPosts] = []
     @Published var isLoading = false
     @Published var showAlert = false
     @Published var errorMessage: String?
@@ -16,13 +16,22 @@ class UserListViewModel: ObservableObject {
     @MainActor
     func fetchUser() async {
         let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users")
+        let apiServicePost = APIService(urlString: "https://jsonplaceholder.typicode.com/posts")
         isLoading.toggle()
         
         defer {
             isLoading.toggle()
         }
         do {
-            users = try await apiService.request()
+            let users: [User] = try await apiService.request()
+            let posts: [Post] = try await apiServicePost.request()
+            var userAndPostTemp: [UserAndPosts] = []
+            for user in users {
+                let userPosts = posts.filter { $0.userId == user.id }
+                let newUserAndPosts = UserAndPosts(user: user, posts: userPosts)
+                userAndPostTemp.append(newUserAndPosts)
+            }
+            self.userAndPosts = userAndPostTemp
         } catch {
             showAlert = true
             errorMessage = error.localizedDescription
