@@ -37,24 +37,5 @@ class UserListViewModel: ObservableObject {
             showAlert = true
             errorMessage = error.localizedDescription
         }
-        
-        //        apiService.request { (result: Result<[User], APIError>) in
-        //            defer {
-        //                DispatchQueue.main.async {
-        //                    self.isLoading.toggle()
-        //                }
-        //            }
-        //            switch result {
-        //            case .success(let users):
-        //                DispatchQueue.main.async {
-        //                    self.users = users
-        //                }
-        //            case .failure(let error):
-        //                DispatchQueue.main.async {
-        //                    self.showAlert = true
-        //                    self.errorMessage = error.localizedDescription
-        //                }
-        //            }
-        //        }
     }
 }
